@@ -3,19 +3,17 @@ import java.util.ArrayList;
 import java.time.LocalDateTime;
 
 public class DatabaseManager {
-    private static DatabaseManager instance = null;  // Start as null
+    private static DatabaseManager instance = null; 
     private ArrayList<Transaction> transactions = new ArrayList<>();
     private final String FILE = "data.txt";
 
-    // PRIVATE constructor (nobody can call "new DatabaseManager()")
     private DatabaseManager() {
         loadAllData();
     }
 
-    // PUBLIC static method to get the ONE instance
     public static DatabaseManager getInstance() {
         if (instance == null) {
-            instance = new DatabaseManager();  // Create only once
+            instance = new DatabaseManager();  
         }
         return instance;
     }
