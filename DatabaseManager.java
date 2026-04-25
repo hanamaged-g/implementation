@@ -12,14 +12,16 @@ import java.time.LocalDateTime;
 
 
 public class DatabaseManager {
-    private static DatabaseManager instance = null;  // Start as null
+    private static DatabaseManager instance = null; 
     private ArrayList<Transaction> transactions = new ArrayList<>();
     private final String FILE = "data.txt";
+
 
     /**
      * Private constructor for Singleton pattern.
      * Loads existing data from data.txt on initialization.
      */
+
     private DatabaseManager() {
         loadAllData();
     }
@@ -32,7 +34,7 @@ public class DatabaseManager {
      */
     public static DatabaseManager getInstance() {
         if (instance == null) {
-            instance = new DatabaseManager();  // Create only once
+            instance = new DatabaseManager();  
         }
         return instance;
     }
