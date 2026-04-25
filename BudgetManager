@@ -1,0 +1,41 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
+public class BudgetManager{
+    public double calculateTotalSpent(List<Transaction> transactions)
+{
+    double total = 0;
+
+    for (Transaction t : transactions)
+    {
+        total += t.getAmount();
+    }
+
+    return total;
+}
+
+    public double calculateDailyLimit(BudgetCycle cycle, List<Transaction> transactions) {
+       double totalSpent = calculateTotalSpent(transactions);
+       double remainingBudget = cycle.getTotalBudget() - totalSpent;
+ 
+       int remainingDays = getRemainingDays(cycle);
+
+       if (remainingDays <= 0)
+        return 0;
+
+     return remainingBudget / remainingDays;
+
+    }
+    public int getRemainingDays(BudgetCycle cycle){
+        LocalDate today = LocalDate.now();
+    LocalDate end = cycle.getEndDate();
+
+    long days = ChronoUnit.DAYS.between(today, end);
+
+    return (int)Math.max(days, 0); // prevents negative days
+
+    }
+
+}
