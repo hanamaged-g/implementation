@@ -1,10 +1,14 @@
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
         
         DatabaseManager db = DatabaseManager.getInstance();
         TransactionManager manager = new TransactionManager(db);
+        notimanager notifier = new notimanager();
+rolloverstrat strategy = new AddToNextDayStrategy();
+BudgetCycle currentCycle = new BudgetCycle(1000.0, 750.0, LocalDate.parse("2024-04-01"), LocalDate.parse("2024-04-30"));
         
         System.out.println("===== MASROOFY BUDGET APP =====\n");
         
@@ -19,6 +23,7 @@ public class Main {
         manager.addTransaction(new Transaction(2, 50.0, "Transport", LocalDateTime.now()));
         manager.addTransaction(new Transaction(3, 30.0, "Coffee", LocalDateTime.now()));
         System.out.println(" transactions added!\n");
+        notifier.checkThreshold(currentCycle);
         
      //get all transactions
         System.out.println("All Transactions (via HistoryManager):");
@@ -39,6 +44,10 @@ public class Main {
         System.out.println("Deleted!\n");
         
      //final
+        double baseLimit = 50.0; 
+double remainingFromYesterday = 20.0;
+double todayLimit = strategy.handleRollover(remainingFromYesterday, baseLimit);
+System.out.println("Strategy Applied: Today's adjusted limit is $" + todayLimit + "\n");
         System.out.println("Final Transaction List:");
         for (Transaction t : manager.getAllTransactions()) {
             System.out.println(" ID:" + t.getId() + " | $" + t.getAmount() + " | " + t.getCategory());
