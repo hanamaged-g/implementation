@@ -9,6 +9,9 @@ public class MainGUI {
         // ===================== DATABASE LAYER (PERSON 3) =====================
         // Sequence Diagram: ALL User Stories using persistence (US #2, #4, #7)
         DatabaseManager db = DatabaseManager.getInstance();
+        notimanager notifier = new notimanager();
+        // Create a fake cycle for testing since Person 1's cycle isn't loaded yet
+        BudgetCycle currentCycle = new BudgetCycle(1000.0, 850.0, java.time.LocalDate.now(), java.time.LocalDate.now().plusDays(30));
 
         // ===================== FRAME =====================
         // UI container for all components
@@ -57,6 +60,15 @@ public class MainGUI {
         JButton testAddBtn = new JButton("Test Add (optional)");
 
         testAddBtn.addActionListener(e -> {
+            Transaction t = new Transaction((int)(Math.random() * 1000), 100, "Test", LocalDateTime.now());
+    db.saveTransaction(t);
+    
+    // --- ADD YOUR LINE HERE ---
+    notifier.checkThreshold(currentCycle); 
+    // --------------------------
+
+    output.setText("Test transaction saved.");
+
 
             // Sequence Diagram: US #2 (Add Transaction flow - backend part only)
             Transaction t = new Transaction(
