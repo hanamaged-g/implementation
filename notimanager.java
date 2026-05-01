@@ -1,25 +1,31 @@
 import javax.swing.JOptionPane;
+import java.util.List;
 
 /**
  * Manages user alerts and budget threshold notifications.
  * Acts as the logic layer for the Notification System sequence diagram.
- * * @author [Ahmed Nour]
+ * * @author Ahmed Nour
  * @version 1.0
  */
 public class notimanager {
 
+    private BudgetManager budgetManager = new BudgetManager();
+
     /**
      * Checks if current spending has reached critical thresholds.
      * Displays a JOptionPane alert if spending is above 80% or 100%.
-     * @param cycle The current BudgetCycle data from Person 1
+     * @param cycle The current BudgetCycle data
      */
     public void checkThreshold(BudgetCycle cycle) {
-        double budget = cycle.getTotalBudget();
-        double spent = cycle.getTotalSpent();
+        DatabaseManager db = DatabaseManager.getInstance();
+        List<Transaction> transactions = db.loadTransactions();
 
-        if (budget <= 0) return;
+        double allowance = cycle.getTotalAllowance();
+        double spent = budgetManager.calculateTotalSpent(transactions);
 
-        double percentage = (spent / budget) * 100;
+        if (allowance <= 0) return;
+
+        double percentage = (spent / allowance) * 100;
 
         if (percentage >= 100) {
             JOptionPane.showMessageDialog(null,
@@ -33,7 +39,6 @@ public class notimanager {
                     JOptionPane.WARNING_MESSAGE);
         }
     }
-
     /**
      * Displays a welcome message to the user upon login.
      * @param username The name of the current user
