@@ -42,6 +42,24 @@ public class MainGUI {
                         " | Time: " + t.getTimestamp() + "\n"
                 );
             }
+             // ===================== Budget part  =====================
+
+            List<Transaction> transactionsList = db.loadTransactions();
+
+            double dailyLimit =
+                    budgetManager.calculateDailyLimit(currentCycle, transactionsList);
+
+            boolean alert =
+                    budgetManager.isEightyPercentReached(currentCycle, transactionsList);
+
+            output.append("\n--- Budget Analysis ---\n");
+            output.append("Safe Daily Limit: " + dailyLimit + "\n");
+
+            if (alert) {
+                output.append("⚠ WARNING: 80% of budget reached!\n");
+            }
+
+            // ===================== Budget part =====================
         });
 
         // ===================== CLEAR ALL BUTTON =====================
