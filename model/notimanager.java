@@ -1,4 +1,6 @@
+package model;
 import javax.swing.JOptionPane;
+
 import java.util.List;
 /**
  * Manages user alerts and budget threshold notifications.
@@ -16,7 +18,7 @@ public class notimanager {
     public void checkThreshold(BudgetCycle cycle) {
         DatabaseManager db = DatabaseManager.getInstance();
         List<Transaction> transactions = db.loadTransactions();
-        double allowance = cycle.getTotalAllowance();
+        double allowance = cycle.getTotalBudget();
         double spent = budgetManager.calculateTotalSpent(transactions);
         if (allowance <= 0) return;
         double percentage = (spent / allowance) * 100;

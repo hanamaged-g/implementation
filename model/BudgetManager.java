@@ -1,3 +1,4 @@
+package model;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -16,7 +17,7 @@ public class BudgetManager {
 
         if (days <= 0) return 0;
 
-        return cycle.getTotalAllowance() / days;
+        return cycle.getTotalBudget() / days;
     }
 
     // total spent
@@ -41,24 +42,31 @@ public class BudgetManager {
 
         return (int) Math.max(days, 0);
     }
-
-    // FR-4 (Dynamic Safe Daily Limit)
-    public double calculateDailyLimit(BudgetCycle cycle, List<Transaction> transactions) {
-
-        double spent = calculateTotalSpent(transactions);
-        double remaining = cycle.getTotalAllowance() - spent;
-        int days = getRemainingDays(cycle);
-
-        if (days <= 0) return 0;
-
-        return remaining / days;
+// Helper: get spending for today only
+public double calculateSpentToday(List<Transaction> transactions) {
+    LocalDate today = LocalDate.now();
+    double total = 0;
+    for (Transaction t : transactions) {
+        if (t.getTimestamp().toLocalDate().equals(today)) {
+            total += t.getAmount();
+        }
     }
+    return total;
+}
 
+// FR-4 (Dynamic Safe Daily Limit) - FIXED
+// Deducts only TODAY'S spending from the daily limit, not total spending
+public double calculateDailyLimit(BudgetCycle cycle, List<Transaction> transactions) {
+    double initialDailyLimit = calculateInitialDailyLimit(cycle);
+    double spentToday = calculateSpentToday(transactions);
+
+    return Math.max(initialDailyLimit - spentToday, 0);
+}
     // FR-6
     public boolean isEightyPercentReached(BudgetCycle cycle, List<Transaction> transactions) {
 
         return calculateTotalSpent(transactions)
-                >= 0.8 * cycle.getTotalAllowance();
+                >= 0.8 * cycle.getTotalBudget();
     }
 
     // FR-5

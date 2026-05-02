@@ -1,3 +1,4 @@
+package model;
 import java.time.LocalDate;
 
 public class BudgetCycle {
@@ -5,6 +6,7 @@ public class BudgetCycle {
     private double totalSpent;
     private LocalDate startDate;
     private LocalDate endDate;
+   
 
     public BudgetCycle(double totalBudget, double totalSpent, LocalDate startDate, LocalDate endDate) {
         this.totalBudget = totalBudget;
@@ -24,4 +26,8 @@ public class BudgetCycle {
     public LocalDate getEndDate() {
         return endDate;
     }
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
 }

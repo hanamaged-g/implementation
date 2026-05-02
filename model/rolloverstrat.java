@@ -1,3 +1,4 @@
+package model;
 /**
  * Interface for the Strategy Pattern handling budget transitions between days.
  * Used in the Budget Rollover sequence diagram to determine how leftovers are handled.

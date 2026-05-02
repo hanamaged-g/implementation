@@ -1,3 +1,4 @@
+package model;
 import java.util.ArrayList;
 /**
  * Handles retrieval of transaction history for visual spending insights.
