@@ -46,10 +46,13 @@ public class MainGUI {
         JTextField startField  = new JTextField("yyyy-MM-dd");
         JTextField endField    = new JTextField("yyyy-MM-dd");
         JButton setCycle       = new JButton("Set Budget Cycle");
+        JTextField goalField = new JTextField();
 
         inputPanel.add(new JLabel("Total Budget:")); inputPanel.add(budgetField);
         inputPanel.add(new JLabel("Start Date:"));   inputPanel.add(startField);
         inputPanel.add(new JLabel("End Date:"));     inputPanel.add(endField);
+       
+        inputPanel.add(new JLabel("Savings Goal:")); inputPanel.add(goalField);
         inputPanel.add(new JLabel(""));              inputPanel.add(setCycle);
 
         // Transaction inputs
@@ -77,18 +80,54 @@ public class MainGUI {
             btnPanel.add(b);
 
         // ── Listeners ─────────────────────────────────────────────────────────
-
-        setCycle.addActionListener(e -> {
+         setCycle.addActionListener(e -> {
             try {
                 c.setBudgetCycle(Double.parseDouble(budgetField.getText()),
                                  startField.getText().trim(),
                                  endField.getText().trim());
                 output.setText("Budget cycle set.");
-            } catch (Exception ex) {
+                c.getCycle().setSavingsGoal(
+                   Double.parseDouble(goalField.getText())
+                );
+                double spent = 0;
+                for (Transaction t : c.getHistory()) {
+                    spent += t.getAmount();
+                }
+                 
+                double goal = Double.parseDouble(goalField.getText());
+                double totalBudget = Double.parseDouble(budgetField.getText());
+                double remaining = totalBudget - spent;
+                
+                String goalStatus;
+                if (goal <= 0) {
+                    goalStatus = "No Savings Goal Set";
+                }
+                else if (spent <= 0) {
+                    goalStatus = " Goal Achieved";
+                }
+                else if ((totalBudget - spent) >= goal) {
+                    goalStatus = " Goal Achieved";
+                }
+                else if ((totalBudget - spent) >= goal * 0.8) {
+                    goalStatus = " Close to Goal";
+                }
+                else {
+                    goalStatus = " Not Yet Achieved";
+                }
+                output.append("\nSpent: " + spent);
+                output.append("\nRemaining: " + remaining);
+                
+                output.append("\nGoal: " + goal);
+                output.append("\nStatus: " + goalStatus + "\n");
+                
+            } 
+            catch (Exception ex) {
                 JOptionPane.showMessageDialog(f, "Use format YYYY-MM-DD for dates.");
             }
         });
+       
 
+        
         add.addActionListener(e -> {
             try {
                 c.addTransaction(Double.parseDouble(amountField.getText()),
@@ -111,7 +150,6 @@ public class MainGUI {
             c.deleteLastTransaction();
             output.setText("Last transaction deleted.");
         });
-
         clear.addActionListener(e -> {
             c.clearAll();
             output.setText("All transactions cleared.");
@@ -125,6 +163,8 @@ public class MainGUI {
 
         days.addActionListener(e ->
             output.setText("Days Remaining: " + c.getRemainingDays()));
+
+
 
         // ── Assemble ──────────────────────────────────────────────────────────
         JPanel top = new JPanel(new BorderLayout());

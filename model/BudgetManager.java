@@ -144,4 +144,11 @@ public class BudgetManager {
 
         return map;
     }
+    public double getSavedAmount(double totalBudget, double totalSpent) {
+     return totalBudget - totalSpent;
+    }
+    public double getGoalProgress(double saved, double goal) {
+    if (goal <= 0) return 0;
+    return (saved / goal) * 100;
+    }
 }

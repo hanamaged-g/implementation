@@ -129,4 +129,7 @@ public class MainController {
         if (cycle == null) return 0;
         return bm.getRemainingDays(cycle);
     }
+    public BudgetCycle getCycle() {
+        return cycle;
+    }
 }

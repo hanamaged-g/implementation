@@ -60,4 +60,12 @@ public class BudgetCycle {
     public LocalDate getStartDate() {
         return startDate;
     }
+    private double savingsGoal;
+
+    public double getSavingsGoal(){
+            return savingsGoal;
+    }
+    public void setSavingsGoal(double savingsGoal) {
+    this.savingsGoal = savingsGoal;
+    }
 }
