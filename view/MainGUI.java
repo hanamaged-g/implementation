@@ -16,6 +16,7 @@ public class MainGUI {
 
     public static void main(String[] args) {
         MainController c = new MainController();
+        controller.notimanager notifier = new controller.notimanager();
 
         // ── Frame setup ───────────────────────────────────────────────────────
         JFrame f = new JFrame("Masroofy — Budget Tracker");
@@ -75,8 +76,9 @@ public class MainGUI {
         JButton daily     = new JButton("Daily Limit");
         JButton chart     = new JButton("Show Chart");
         JButton days      = new JButton("Remaining Days");
+        JButton reportBtn = new JButton("Weekly Report");
 
-        for (JButton b : new JButton[]{history, deleteBtn, clear, daily, chart, days})
+        for (JButton b : new JButton[]{history, deleteBtn, clear, daily, chart, days,reportBtn})
             btnPanel.add(b);
 
         // ── Listeners ─────────────────────────────────────────────────────────
@@ -125,7 +127,13 @@ public class MainGUI {
                 JOptionPane.showMessageDialog(f, "Use format YYYY-MM-DD for dates.");
             }
         });
-       
+        reportBtn.addActionListener(e -> {
+            if (c.getCycle() != null) {
+                notifier.showWeeklyReport(c.getCycle());
+            } else {
+                JOptionPane.showMessageDialog(f, "Please set a budget cycle first!");
+            }
+        });
 
         
         add.addActionListener(e -> {
@@ -133,6 +141,7 @@ public class MainGUI {
                 c.addTransaction(Double.parseDouble(amountField.getText()),
                                  (String) categoryBox.getSelectedItem());
                 output.append("Transaction added.\n");
+                notifier.checkThreshold(c.getCycle());
             } catch (IllegalStateException ex) {
                 JOptionPane.showMessageDialog(f, "Set a budget cycle first.");
             } catch (NumberFormatException ex) {
