@@ -1,4 +1,4 @@
-package controller;
+package model;
 
 import javax.swing.JOptionPane;
 import model.BudgetCycle;

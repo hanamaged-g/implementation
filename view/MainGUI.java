@@ -16,7 +16,7 @@ public class MainGUI {
 
     public static void main(String[] args) {
         MainController c = new MainController();
-        controller.notimanager notifier = new controller.notimanager();
+        model.notimanager notifier = new model.notimanager();
 
         // ── Frame setup ───────────────────────────────────────────────────────
         JFrame f = new JFrame("Masroofy — Budget Tracker");
