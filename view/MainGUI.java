@@ -141,7 +141,6 @@ public class MainGUI {
                 c.addTransaction(Double.parseDouble(amountField.getText()),
                                  (String) categoryBox.getSelectedItem());
                 output.append("Transaction added.\n");
-                notifier.checkThreshold(c.getCycle());
             } catch (IllegalStateException ex) {
                 JOptionPane.showMessageDialog(f, "Set a budget cycle first.");
             } catch (NumberFormatException ex) {
